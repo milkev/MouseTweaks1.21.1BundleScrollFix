@@ -6,12 +6,10 @@ import net.neoforged.neoforge.client.event.ScreenEvent.MouseDragged;
 import net.neoforged.neoforge.client.event.ScreenEvent.MouseScrolled;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import yalter.mousetweaks.Constants;
 import yalter.mousetweaks.Logger;
 import yalter.mousetweaks.Main;
@@ -19,21 +17,16 @@ import yalter.mousetweaks.MouseButton;
 
 @Mod(Constants.MOD_ID)
 public class MouseTweaksNeo {
-    public MouseTweaksNeo(IEventBus modBus) {
+    public MouseTweaksNeo() {
         if (FMLEnvironment.dist != net.neoforged.api.distmarker.Dist.CLIENT) {
             Logger.Log("Disabled because not running on the client.");
             return;
         }
 
-        modBus.addListener(this::onClientSetup);
+        Main.initialize();
         NeoForge.EVENT_BUS.register(this);
 
         ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, ClientHelper::new);
-    }
-
-    public void onClientSetup(FMLClientSetupEvent event) {
-        // Minecraft.getInstance() is now non-null in this event handler.
-        Main.initialize();
     }
 
     @SubscribeEvent
